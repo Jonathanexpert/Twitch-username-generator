@@ -1,0 +1,353 @@
+<div class="emote-resizer">
+  <h1>Twitch Emote Resizer</h1>
+  <p class="subtitle">Perfectly resize emotes for all Twitch subscription tiers</p>
+  
+  <div class="tool-container">
+    <!-- Upload Section -->
+    <div class="upload-section">
+      <div class="drop-zone" id="drop-zone">
+        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSIjOTE0N2ZmIj48cGF0aCBkPSJNMTkgMTN2N2EyIDIgMCAwMS0yIDJIN2EyIDIgMCAwMS0yLTJ2LTdoMTR6bS03LjUzMS0xLjkxMmEyLjUwNiAyLjUwNiAwIDAwLTMuMDYyIDBsLTQuMjUgNC41YTIuNTAyIDIuNTAyIDAgMDAzLjA2MyAzLjlsMS43NS0xLjg1NnY1LjUxNmExIDEgMCAwMDIgMHYtNS41MTZsMS43NSAxLjg1NmEyLjUwMiAyLjUwMiAwIDAwMy4wNjMtMy45bC00LjI1LTQuNXoiLz48L3N2Zz4=" alt="Upload" class="upload-icon">
+        <p>Drag & drop your emote image here</p>
+        <p class="small">or</p>
+        <button id="file-select">Select File</button>
+        <input type="file" id="file-input" accept="image/*" style="display: none;">
+      </div>
+    </div>
+    
+    <!-- Size Options -->
+    <div class="size-options">
+      <h3>Twitch Emote Sizes</h3>
+      <div class="size-grid">
+        <div class="size-option">
+          <input type="checkbox" id="size-28" checked>
+          <label for="size-28">28x28px (Mobile)</label>
+        </div>
+        <div class="size-option">
+          <input type="checkbox" id="size-56" checked>
+          <label for="size-56">56x56px</label>
+        </div>
+        <div class="size-option">
+          <input type="checkbox" id="size-112" checked>
+          <label for="size-112">112x112px (Standard)</label>
+        </div>
+      </div>
+      <button id="resize-btn" disabled>Resize Emotes</button>
+    </div>
+    
+    <!-- Results -->
+    <div class="results-section" id="results" style="display: none;">
+      <h3>Your Resized Emotes</h3>
+      <div class="emote-previews" id="emote-previews"></div>
+      <button id="download-all">Download All</button>
+    </div>
+  </div>
+  
+  <div class="info-box">
+    <h3>Twitch Emote Requirements</h3>
+    <ul>
+      <li>✔ Transparent PNG format recommended</li>
+      <li>✔ Max file size: 25KB per emote</li>
+      <li>✔ Square aspect ratio (1:1)</li>
+      <li>✔ No copyrighted material</li>
+    </ul>
+  </div>
+</div>
+
+<style>
+  .emote-resizer {
+    font-family: 'Inter', sans-serif;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #1f1f23;
+    border-radius: 8px;
+    color: #efeff1;
+  }
+  
+  .emote-resizer h1 {
+    color: #9147ff;
+    text-align: center;
+    margin-bottom: 5px;
+  }
+  
+  .subtitle {
+    text-align: center;
+    color: #adadb8;
+    margin-bottom: 25px;
+  }
+  
+  .tool-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .drop-zone {
+    border: 2px dashed #3a3a3d;
+    border-radius: 8px;
+    padding: 30px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  
+  .drop-zone:hover, .drop-zone.active {
+    border-color: #9147ff;
+    background-color: #2a2a2e;
+  }
+  
+  .upload-icon {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 15px;
+  }
+  
+  .drop-zone p {
+    margin: 8px 0;
+  }
+  
+  .small {
+    font-size: 0.9em;
+    color: #adadb8;
+  }
+  
+  #file-select, #resize-btn, #download-all {
+    background-color: #9147ff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+  }
+  
+  #file-select:hover, #resize-btn:hover, #download-all:hover {
+    background-color: #772ce8;
+  }
+  
+  #resize-btn:disabled, #download-all:disabled {
+    background-color: #3a3a3d;
+    cursor: not-allowed;
+  }
+  
+  .size-options {
+    background-color: #2a2a2e;
+    padding: 15px;
+    border-radius: 8px;
+  }
+  
+  .size-options h3 {
+    margin-top: 0;
+    color: #9147ff;
+  }
+  
+  .size-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+    margin-bottom: 15px;
+  }
+  
+  .size-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .results-section {
+    background-color: #2a2a2e;
+    padding: 15px;
+    border-radius: 8px;
+  }
+  
+  .emote-previews {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin: 15px 0;
+  }
+  
+  .emote-preview {
+    text-align: center;
+  }
+  
+  .emote-preview img {
+    background-color: #3a3a3d;
+    border-radius: 4px;
+    padding: 5px;
+  }
+  
+  .info-box {
+    background-color: #2a2a2e;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 20px;
+  }
+  
+  .info-box h3 {
+    color: #9147ff;
+    margin-top: 0;
+  }
+  
+  .info-box ul {
+    padding-left: 20px;
+  }
+  
+  .info-box li {
+    margin-bottom: 8px;
+  }
+</style>
+
+<script>
+  // DOM Elements
+  const dropZone = document.getElementById('drop-zone');
+  const fileInput = document.getElementById('file-input');
+  const fileSelectBtn = document.getElementById('file-select');
+  const resizeBtn = document.getElementById('resize-btn');
+  const resultsSection = document.getElementById('results');
+  const emotePreviews = document.getElementById('emote-previews');
+  const downloadAllBtn = document.getElementById('download-all');
+  
+  // File handling
+  fileSelectBtn.addEventListener('click', () => fileInput.click());
+  
+  fileInput.addEventListener('change', (e) => {
+    if (e.target.files.length) {
+      handleFile(e.target.files[0]);
+    }
+  });
+  
+  // Drag and drop
+  ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    dropZone.addEventListener(eventName, preventDefaults, false);
+  });
+  
+  function preventDefaults(e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+  
+  ['dragenter', 'dragover'].forEach(eventName => {
+    dropZone.addEventListener(eventName, highlight, false);
+  });
+  
+  ['dragleave', 'drop'].forEach(eventName => {
+    dropZone.addEventListener(eventName, unhighlight, false);
+  });
+  
+  function highlight() {
+    dropZone.classList.add('active');
+  }
+  
+  function unhighlight() {
+    dropZone.classList.remove('active');
+  }
+  
+  dropZone.addEventListener('drop', (e) => {
+    const dt = e.dataTransfer;
+    const file = dt.files[0];
+    handleFile(file);
+  });
+  
+  // Core functionality
+  let originalImage = null;
+  
+  function handleFile(file) {
+    if (!file.type.match('image.*')) {
+      alert('Please upload an image file');
+      return;
+    }
+    
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      originalImage = new Image();
+      originalImage.src = e.target.result;
+      originalImage.onload = () => {
+        resizeBtn.disabled = false;
+      };
+    };
+    reader.readAsDataURL(file);
+  }
+  
+  resizeBtn.addEventListener('click', () => {
+    if (!originalImage) return;
+    
+    const sizes = [];
+    if (document.getElementById('size-28').checked) sizes.push(28);
+    if (document.getElementById('size-56').checked) sizes.push(56);
+    if (document.getElementById('size-112').checked) sizes.push(112);
+    
+    if (sizes.length === 0) {
+      alert('Please select at least one size');
+      return;
+    }
+    
+    emotePreviews.innerHTML = '';
+    
+    sizes.forEach(size => {
+      const canvas = document.createElement('canvas');
+      canvas.width = size;
+      canvas.height = size;
+      const ctx = canvas.getContext('2d');
+      
+      // Draw image centered and scaled to fit
+      const scale = Math.min(
+        canvas.width / originalImage.width,
+        canvas.height / originalImage.height
+      );
+      const x = (canvas.width - originalImage.width * scale) / 2;
+      const y = (canvas.height - originalImage.height * scale) / 2;
+      
+      ctx.drawImage(
+        originalImage,
+        x, y,
+        originalImage.width * scale,
+        originalImage.height * scale
+      );
+      
+      const previewDiv = document.createElement('div');
+      previewDiv.className = 'emote-preview';
+      
+      const img = document.createElement('img');
+      img.src = canvas.toDataURL('image/png');
+      img.alt = `${size}x${size} emote`;
+      img.width = size;
+      img.height = size;
+      
+      const label = document.createElement('p');
+      label.textContent = `${size}x${size}`;
+      
+      const downloadBtn = document.createElement('button');
+      downloadBtn.textContent = 'Download';
+      downloadBtn.className = 'download-btn';
+      downloadBtn.onclick = () => downloadImage(canvas, size);
+      
+      previewDiv.appendChild(img);
+      previewDiv.appendChild(label);
+      previewDiv.appendChild(downloadBtn);
+      emotePreviews.appendChild(previewDiv);
+    });
+    
+    resultsSection.style.display = 'block';
+    downloadAllBtn.disabled = false;
+  });
+  
+  downloadAllBtn.addEventListener('click', () => {
+    const downloadButtons = document.querySelectorAll('.download-btn');
+    downloadButtons.forEach(btn => btn.click());
+  });
+  
+  function downloadImage(canvas, size) {
+    const link = document.createElement('a');
+    link.download = `twitch-emote-${size}x${size}.png`;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  }
+</script>
+<br>
+<p style="text-align: center; font-family: Arial, sans-serif; color: #333333; line-height: 1.5;">
+  Developed and designed with the love of 
+  <a href="https://www.mainconverter.com/twitch-username-generator/" 
+     style="color: #ff69b4; text-decoration: none;">Mainconverter</a>
+</p>
